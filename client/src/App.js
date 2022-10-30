@@ -25,11 +25,23 @@ class App extends Component {
       console.log(this.state)
     }))
   }
+
+  searchChange = (e) => {
+    const searchField = e.target.value.toLowerCase();
+    this.setState(
+      () => {
+      return { searchField };
+      }
+    );
+  }
+
   render(){ //telling React what to render
     console.log('render') 
+    const { employees, searchField } = this.state;
+    const { searchChange } = this;
     // .filter returns a new array, so the original state of emp is unmodified
-    const filteredEmployees = this.state.employees.filter((emp) => {
-      return emp.name.toLowerCase().includes(this.state.searchField)
+    const filteredEmployees = employees.filter((emp) => {
+      return emp.name.toLowerCase().includes(searchField)
     })
 
     return (
@@ -40,15 +52,9 @@ class App extends Component {
         className='search-box' 
         type="search" 
         placeholder="Search Employees" 
-        onChange={(e) => {
-          const searchField = e.target.value.toLowerCase();
-          this.setState(
-            () => {
-            return { searchField };
-            }
-          );
-        }} 
+        onChange={searchChange} 
       />
+        {/* because the state of emp is always changing, we map over the current state */}
         {filteredEmployees.map((emp) => {
           return <div key={emp.id}>
             <h1>{emp.name}</h1>

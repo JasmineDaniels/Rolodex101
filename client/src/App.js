@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import './App.css'
-import Form from 'react-bootstrap/Form'
-// import Input, { InputGroup } from 'react-bootstrap'
+// import Form from 'react-bootstrap/Form'
+import CardList from './components/card-list/card-list.component';
+import SearchBar from './components/search-bar/search-bar.component';
 
 class App extends Component {
   constructor(){ // initial value of state 
@@ -11,18 +12,15 @@ class App extends Component {
       employees: [],
       searchField: '',
     };
-    console.log('constructor')
+    // console.log('constructor')
   }
 
   componentDidMount(){
-    console.log('componentDidMount')
+    // console.log('componentDidMount')
     fetch('https://jsonplaceholder.typicode.com/users')
     .then(res => res.json())
     .then( users => this.setState(() => {
       return { employees: users };
-    },
-    () => {
-      console.log(this.state)
     }))
   }
 
@@ -36,7 +34,7 @@ class App extends Component {
   }
 
   render(){ //telling React what to render
-    console.log('render') 
+    // console.log('render app.js') 
     const { employees, searchField } = this.state;
     const { searchChange } = this;
     // .filter returns a new array, so the original state of emp is unmodified
@@ -47,20 +45,13 @@ class App extends Component {
     return (
       <>
       <div className="App">
-      <Form.Control 
-        size='lg' 
-        className='search-box' 
-        type="search" 
-        placeholder="Search Employees" 
-        onChange={searchChange} 
-      />
+        <SearchBar 
+          onChangeHandler={searchChange} 
+          placeholder='Search Employees' 
+          className='search-box'
+        />
         {/* because the state of emp is always changing, we map over the current state */}
-        {filteredEmployees.map((emp) => {
-          return <div key={emp.id}>
-            <h1>{emp.name}</h1>
-          </div>
-        })}
-        
+        <CardList employees={filteredEmployees}/>
       </div>
       </>
     );
